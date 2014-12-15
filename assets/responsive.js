@@ -20,6 +20,7 @@ function responsiveInit(){
     $('header').css('opacity', opacity);
 
   }
+
   $(window).on("scroll", setHeaderStyle);
 }
 
