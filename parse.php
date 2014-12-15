@@ -3,7 +3,15 @@
 // generic jimdo site parser
 // work in progress
 
-$home = file_get_contents('pconfig.txt');
+header('Content-Type: application/json');
+
+$cache = @json_decode(file_get_contents('pcache.json'));
+if ($cache && time() - $cache[0] < 600){
+  echo json_encode($cache[1]);
+  die();
+}
+
+$home = trim(file_get_contents('pconfig.txt'));
 $homehtml = file_get_contents($home);
 
 function parseToc($html){
@@ -173,7 +181,6 @@ $res = array();
 foreach ($toc as $i)
   $res[] = parsePage($home, $i[0], $i[1]);
 
-header('Content-Type: application/json');
 echo json_encode($res);
-
+file_put_contents('pcache.json', json_encode(array(time(), $res)));
 
